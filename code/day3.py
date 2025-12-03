@@ -19,7 +19,19 @@ def part1(input_data):
 
 
 def part2(input_data):
-    return ''
+    bank_joltages = []
+    for battery_bank in input_data:
+        total_joltage = 0
+        discarded_point = 0
+        for i in range(12):
+            if i == 11:
+                activated_battery = max(battery_bank[discarded_point:])
+            else:
+                activated_battery = max(battery_bank[discarded_point:-(11-i)])
+            total_joltage += activated_battery*pow(10, (11-i))
+            discarded_point = battery_bank[discarded_point:].index(activated_battery)+discarded_point+1
+        bank_joltages.append(total_joltage)
+    return sum(bank_joltages)
 
 
 def main() -> None:
