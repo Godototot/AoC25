@@ -24,7 +24,29 @@ def part1(input_data):
 
 
 def part2(input_data):
-    return ''
+    operations = [op for op in input_data[-1].split(' ') if op != '']
+    operator_counter = 0
+    raw_number_lines = [list(line) for line in input_data[:-1]]
+    math_problems = []
+    current_numbers = []
+    for i in range(len(input_data[0])):
+        digits = []
+        for j in range(len(raw_number_lines)):
+            raw_digit = raw_number_lines[j][i]
+            if raw_digit != ' ':
+                 digits.append(int(raw_digit))
+        if i == len(input_data[0]) - 1:
+            current_numbers.append(sum([num*pow(10, len(digits)-k-1) for k, num in enumerate(digits)]))
+        if len(digits) == 0 or i == len(input_data[0])-1:
+            math_problems.append((current_numbers, operations[operator_counter]))
+            operator_counter += 1
+            current_numbers = []
+        else:
+            current_numbers.append(sum([num*pow(10, len(digits)-k-1) for k, num in enumerate(digits)]))
+    result_sum = sum([operator_dict[math_problem[1]](math_problem[0]) for math_problem in math_problems])
+    for i in range(len(math_problems)):
+        print(math_problems[i])
+    return result_sum
 
 
 def main() -> None:
