@@ -39,12 +39,12 @@ def prepare_input(input_file):
             if grid_point == '^':
                 splitters_in_line.append(x)
         splitters.append(splitters_in_line)
-    return start_x, splitters
+    return start_x, splitters, len(grid_lines[0])
 
 
 
 def part1(input_data):
-    start_x, splitters = input_data
+    start_x, splitters, size = input_data
     split_counter = 0
     tach_beams = {start_x}
     for splitters_in_line in splitters:
@@ -61,7 +61,19 @@ def part1(input_data):
 
 
 def part2(input_data):
-    return ''
+    start_x, splitters, size = input_data
+    tach_beams = [0]*size
+    tach_beams[start_x] = 1
+    for splitters_in_line in splitters:
+        new_tach_beams = [0]*size
+        for x, tach in enumerate(tach_beams):
+            if tach>0 and x in splitters_in_line:
+                new_tach_beams[x - 1] += tach
+                new_tach_beams[x + 1] += tach
+            else:
+                new_tach_beams[x] += tach_beams[x]
+        tach_beams = new_tach_beams
+    return sum(tach_beams)
 
 
 def main() -> None:
